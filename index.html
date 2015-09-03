@@ -4,69 +4,43 @@
   <title>Key Pair generation for SSH access</title>
   <script src="base64url.js"></script>  
   <script src="ssh-util.js"></script>  
-  <script src="keypair.js"></script>  
-  <style>
-    label {
-      display: inline-block;
-      width: 80px;
-    }
-    select{
-      width: 200px;
-    }
-    input {
-      width: 180px;
-    }
-  </style>
+  <script src="keypair.js"></script>
+    <link rel="stylesheet" href="js-keygen.css">
 </head>
 <body>
-  <div><label for="name">Name:</label><input id="name" type="text" value="me@domain"></div>
-  <div><label for="alg">Algorithm:</label><select id="alg"><option value="RSASSA-PKCS1-v1_5" selected>RSASSA-PKCS1-v1_5</option></select>
-    <label for="size">Size:</label><input id="size" type="text" value="2048"></div>
-  <div><label for="hash">Hash:</label><select id="hash">
-      <option value="SHA-1">SHA-1</option>
+  For an explanation on how this work, see the <a href="http://blog.roumanoff.com/">blog post</a>.<br>
+  Usually you would want to save the private key to the machine initiating the ssh connection, and you want to copy the public key to the system receiving the connection.<br>
+  No data is being sent to the server, everything happens within the context of this web page.
+  <hr>
+  <div><label for="name">Name:</label><input id="name" type="text" value="webcrypto"></div>
+  <div><label for="alg">Algorithm:</label><select id="alg" disabled>
+    <option value="RSASSA-PKCS1-v1_5" selected>RSASSA-PKCS1-v1_5</option>
+    <option value="RSA-PSS">RSA-PSS</option>
+    <option value="ECDSA">ECDSA</option>
+    </select>
+    <label for="size">Size:</label><select id="size" disabled>
+    <option value="1024" selected>1024</option>
+    <option value="2048">2048</option>
+    <option value="4096">4096</option>
+    </select>
+  </div>
+  <div><label for="hash">Hash:</label><select id="hash" disabled>
+      <option value="SHA-1" selected>SHA-1</option>
       <option value="SHA-256">SHA-256</option>
       <option value="SHA-384">SHA-384</option>
       <option value="SHA-512">SHA-512</option>
     </select></div>
-  <button id="generate">Generate</button>
+  <label for="generate"></label><button id="generate">Generate</button>
   <br>
-<hr>  
-<a id="private" style="display: none;" href="" download="id_rsa">id_rsa</a>
-<a id="public" style="display: none;" href="" download="id_rsa.pub">id_rsa.pub</a>  
-Private Key <button id="copyPrivate">Copy</button> or <button id="savePrivate">Save</button><br>
-<textarea id="privateKey" style="overflow: scroll; width: 650px; height: 150px; word-wrap:break-word;font-family: monospace;" spellcheck="false"></textarea>
-  
-<hr>
-Public Key <button id="copyPublic">Copy</button> or <button id="savePublic">Save</button><br>
-<textarea id="publicKey" style="width: 650px; height: 70px; word-wrap:break-word;font-family: monospace;" spellcheck="false"></textarea>
 
-  <script>
-    function copy(id) {
-      return function() {
-        var ta = document.querySelector(id);
-        ta.focus();
-        ta.select();
-        try {
-          var successful = document.execCommand('copy');
-          var msg = successful ? 'successful' : 'unsuccessful';
-          console.log('Copy key command was ' + msg);
-        } catch(err) {
-          console.log('Oops, unable to copy');
-        }
-        window.getSelection().removeAllRanges();
-        ta.blur();
-      }
-    }
-    
-    document.querySelector('#savePrivate').addEventListener('click', function(event) {
-      document.querySelector('a#private').click();
-    });
-    document.querySelector('#copyPrivate').addEventListener('click', copy('#privateKey'));
-    document.querySelector('#savePublic').addEventListener('click', function(event) {
-      document.querySelector('a#public').click();
-    });
-    document.querySelector('#copyPublic').addEventListener('click', copy('#publicKey'));
-  </script>
+  <hr>  
+  <a id="private" style="display: none;" href="" download="id_rsa">id_rsa</a>
+  <a id="public" style="display: none;" href="" download="id_rsa.pub">id_rsa.pub</a>  
+  Private Key <button id="copyPrivate">Copy</button> or <button id="savePrivate">Save</button><br>
+  <textarea id="privateKey" style="height: 150px;" spellcheck="false"></textarea>
 
+  <hr>
+  Public Key <button id="copyPublic">Copy</button> or <button id="savePublic">Save</button><br>
+  <textarea id="publicKey" spellcheck="false"></textarea>
 </body>
 </html>

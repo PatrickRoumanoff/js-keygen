@@ -48,23 +48,3 @@ function generateKeyPair(alg, size, name) {
     return Promise.all([private, public]);
   });
 }
-
-function buildHref(data) {
-  return "data:application/octet-stream;charset=utf-8;base64," + window.btoa(data);
-}
-
-document.addEventListener("DOMContentLoaded", function(event) {
-  document.querySelector('#generate').addEventListener('click', function(event) {
-    var name = document.querySelector('#name').value || "name";
-    var alg = document.querySelector('#alg').value || "RSASSA-PKCS1-v1_5";
-    var size = parseInt(document.querySelector('#size').value || "2048");
-    generateKeyPair(alg, size, name).then(function (keys) {
-      document.querySelector('#private').setAttribute("href", buildHref(keys[0]));
-      document.querySelector('#public').setAttribute("href", buildHref(keys[1]));
-      document.querySelector('#privateKey').textContent = keys[0];
-      document.querySelector('#publicKey').textContent = keys[1];
-    }).catch(function(err){
-      console.error(err);
-    });
-  });
-});

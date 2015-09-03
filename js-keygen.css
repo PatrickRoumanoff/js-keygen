@@ -1,0 +1,18 @@
+label {
+  display: inline-block;
+  width: 80px;
+}
+select{
+  width: 200px;
+}
+input {
+  width: 180px;
+}
+textarea {
+  margin-top: 10px;
+  width: 650px;
+  height: 70px;
+  word-wrap: break-word;
+  font-family: monospace;
+  overflow: scroll;
+}
