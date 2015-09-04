@@ -31,6 +31,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
   
   document.querySelector('#generate').addEventListener('click', function(event) {
     var name = document.querySelector('#name').value || "name";
+    document.querySelector('a#private').setAttribute("download", name + "_rsa");
+    document.querySelector('a#public').setAttribute("download", name + "_rsa.pub");
+    
     var alg = document.querySelector('#alg').value || "RSASSA-PKCS1-v1_5";
     var size = parseInt(document.querySelector('#size').value || "2048");
     generateKeyPair(alg, size, name).then(function (keys) {
@@ -38,6 +41,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       document.querySelector('#public').setAttribute("href", buildHref(keys[1]));
       document.querySelector('#privateKey').textContent = keys[0];
       document.querySelector('#publicKey').textContent = keys[1];
+      document.querySelector('#result').style.display = "block";
     }).catch(function(err){
       console.error(err);
     });

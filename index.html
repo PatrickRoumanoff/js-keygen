@@ -6,9 +6,11 @@
   <script src="ssh-util.js"></script>  
   <script src="js-keygen-ui.js"></script>
   <script src="js-keygen.js"></script>
-    <link rel="stylesheet" href="js-keygen.css">
+  <link rel="stylesheet" href="js-keygen.css">
+  <link rel="icon" type="image/png" href="key.png">
 </head>
 <body>
+  <div id="content">
   <h1>js-keygen</h1>
   
   Generate a keypair to be used with openSSH, this replicate ssh-keygen function in javascript in the browser, using the webcrypto api and a bit of glue.<br>
@@ -38,17 +40,20 @@
   <label for="generate"></label><button id="generate">Generate</button>
   <br>
 
-  <hr>  
-  <a id="private" style="display: none;" href="" download="id_rsa">id_rsa</a>
-  <a id="public" style="display: none;" href="" download="id_rsa.pub">id_rsa.pub</a>  
-  Private Key <button id="copyPrivate">Copy</button> or <button id="savePrivate">Save</button><br>
-  <textarea id="privateKey" style="height: 150px;" spellcheck="false"></textarea>
+  <div id="result" style="display:none;">
+    <hr>  
+    <a id="private" style="display: none;" href="" download="id_rsa">id_rsa</a>
+    <a id="public" style="display: none;" href="" download="id_rsa.pub">id_rsa.pub</a>  
+    Private Key <button id="copyPrivate">Copy</button> or <button id="savePrivate">Save</button><br>
+    <textarea id="privateKey" style="height: 150px;" spellcheck="false"></textarea>
 
-  <hr>
-  Public Key <button id="copyPublic">Copy</button> or <button id="savePublic">Save</button><br>
-  <textarea id="publicKey" spellcheck="false"></textarea>
+    <hr>
+    Public Key <button id="copyPublic">Copy</button> or <button id="savePublic">Save</button><br>
+    <textarea id="publicKey" spellcheck="false"></textarea>
+  </div>  
   <hr>
   Made with <span style="color:magenta;">&hearts;</span> by <a href="http://blog.roumanoff.com">Patrick Roumanoff</a>
   <a href="https://github.com/PatrickRoumanoff/js-keygen"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+</div>
 </body>
 </html>
