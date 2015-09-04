@@ -1,3 +1,7 @@
+/*jslint browser: true, devel: true, bitwise: true, sloppy: true, vars: true*/
+
+var base64urlDecode;
+
 function arrayToString(a) {
   return String.fromCharCode.apply(null, a);
 }
@@ -17,14 +21,14 @@ function pemToArray(pem) {
 }
 
 function arrayToPem(a) {
-  return window.btoa(a.map(function (c) { 
+  return window.btoa(a.map(function (c) {
     return String.fromCharCode(c);
   }).join(''));
 }
 
 function arrayToLen(a) {
   var result = 0, i;
-  for(i = 0; i < a.length; i++) {
+  for (i = 0; i < a.length; i += 1) {
     result = result * 256 + a[i];
   }
   return result;
@@ -32,7 +36,7 @@ function arrayToLen(a) {
 
 function integerToOctet(n) {
   var result = [];
-  for(;n > 0; n = n >> 8 ) {
+  for (true; n > 0; n = n >> 8) {
     result.push(n & 0xFF);
   }
   return result.reverse();
@@ -40,7 +44,7 @@ function integerToOctet(n) {
 
 function lenToArray(n) {
   var oct = integerToOctet(n), i;
-  for(i = oct.length; i < 4; i++) {
+  for (i = oct.length; i < 4; i += 1) {
     oct.unshift(0);
   }
   return oct;
@@ -49,13 +53,13 @@ function lenToArray(n) {
 function decodePublicKey(s) {
   var split = s.split(" ");
   var prefix = split[0];
-  if(prefix != "ssh-rsa") {
+  if (prefix !== "ssh-rsa") {
     throw ("Unknown prefix:" + prefix);
   }
   var buffer = pemToArray(split[1]);
   var nameLen = arrayToLen(buffer.splice(0, 4));
   var type = arrayToString(buffer.splice(0, nameLen));
-  if(type != "ssh-rsa") {
+  if (type !== "ssh-rsa") {
     throw ("Unknown key type:" + type);
   }
   var exponentLen = arrayToLen(buffer.splice(0, 4));
@@ -65,20 +69,20 @@ function decodePublicKey(s) {
   return {type: type, exponent: exponent, key: key, name: split[2]};
 }
 
+function checkHighestBit(v) {
+  if (v[0] >> 7 === 1) { // add leading zero if first bit is set
+    v.unshift(0);
+  }
+  return v;
+}
+
 function jwkToInternal(jwk) {
   return {
     type: "ssh-rsa",
     exponent: checkHighestBit(stringToArray(base64urlDecode(jwk.e))),
-    name: "name", 
+    name: "name",
     key: checkHighestBit(stringToArray(base64urlDecode(jwk.n)))
   };
-}
-
-function checkHighestBit(v) {
-  if(v[0] >> 7 === 1) { // add leading zero if first bit is set
-    v.unshift(0);
-  }
-  return v;
 }
 
 function encodePublicKey(jwk, name) {
@@ -94,7 +98,7 @@ function encodePublicKey(jwk, name) {
 
 function asnEncodeLen(n) {
   var result = [];
-  if(n >> 7) {
+  if (n >> 7) {
     result = integerToOctet(n);
     result.unshift(0x80 + result.length);
   } else {
@@ -113,6 +117,6 @@ function encodePrivateKey(jwk) {
   var seq = [0x02, 0x01, 0x00]; // extra seq for SSH
   seq = seq.concat.apply(seq, list);
   var len = asnEncodeLen(seq.length);
-  var a = [0x30].concat(len , seq); // seq is 0x30
+  var a = [0x30].concat(len, seq); // seq is 0x30
   return arrayToPem(a);
 }
