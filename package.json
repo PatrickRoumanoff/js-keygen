@@ -14,7 +14,7 @@
   },
   "git": {
     "scripts": {
-      "pre-push": "surge --project ./ --domain js-keygen.surge.sh"
+      "pre-push": "npx surge --project ./ --domain js-keygen.surge.sh"
     }
   },
   "scripts": {
