@@ -50,5 +50,5 @@ function generateKeyPair(alg, size, name) {
     });
 }
 
-module = module || {};
+module = window.module || {};
 module.exportKey = { arrayBufferToBase64, generateKeyPair };

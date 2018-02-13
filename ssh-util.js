@@ -118,5 +118,5 @@ function encodePrivateKey(jwk) {
   return arrayToPem(a);
 }
 
-module = module || {};
+module = window.module || {};
 module.exports = { base64urlToArray, decodePublicKey, encodePublicKey, encodePrivateKey };
