@@ -1,4 +1,3 @@
-/*jslint browser: true, sloppy: true */
 //adapted from https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-08#appendix-C
 
 function base64urlEncode(arg) {
@@ -24,5 +23,7 @@ function base64urlDecode(s) {
     default:
       throw "Illegal base64url string!";
   }
-  return window.atob(s); // Standard base64 decoder
+  return window.atob(s); // Regular base64 decoder
 }
+
+module.exports = { base64urlDecode, base64urlEncode };

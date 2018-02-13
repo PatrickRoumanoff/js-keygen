@@ -2,7 +2,9 @@
 
 See the live demo at https://js-keygen.surge.sh
 
-There is no way to generate a ssh keypair on the chrome book, but we have access to chrome and the webcrypto API. I had to do all sorts of gymnastics to convert the generated keypair to something that can be consummed by SSH.
+For some explanation see http://blog.roumanoff.com/2015/09/using-webcrypto-api-to-generate-keypair.html
+
+There is no way to generate a ssh keypair on a chromebook, but we have access to chrome and the webcrypto API. I had to do all sorts of gymnastics to convert the generated keypair to something that can be consummed by SSH.
 
 * I had to learn about the WebCrypto API - which was the initial goal
 * I had to learn about JWK

@@ -1,5 +1,3 @@
-/*jslint browser: true, devel: true, bitwise: true, sloppy: true, vars: true*/
-
 var base64urlDecode;
 
 function arrayToString(a) {
@@ -127,3 +125,5 @@ function encodePrivateKey(jwk) {
   var a = [0x30].concat(len, seq); // seq is 0x30
   return arrayToPem(a);
 }
+
+module.exports = { base64urlToArray, decodePublicKey, encodePublicKey, encodePrivateKey };

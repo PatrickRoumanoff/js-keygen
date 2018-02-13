@@ -1,5 +1,4 @@
-/*jslint browser: true, sloppy: true, vars: true, indent: 2*/
-var console, generateKeyPair;
+var generateKeyPair;
 
 function copy(id) {
   return function() {
@@ -22,17 +21,17 @@ function buildHref(data) {
   return "data:application/octet-stream;charset=utf-8;base64," + window.btoa(data);
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
-  document.querySelector("#savePrivate").addEventListener("click", function(event) {
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelector("#savePrivate").addEventListener("click", function() {
     document.querySelector("a#private").click();
   });
   document.querySelector("#copyPrivate").addEventListener("click", copy("#privateKey"));
-  document.querySelector("#savePublic").addEventListener("click", function(event) {
+  document.querySelector("#savePublic").addEventListener("click", function() {
     document.querySelector("a#public").click();
   });
   document.querySelector("#copyPublic").addEventListener("click", copy("#publicKey"));
 
-  document.querySelector("#generate").addEventListener("click", function(event) {
+  document.querySelector("#generate").addEventListener("click", function() {
     var name = document.querySelector("#name").value || "name";
     document.querySelector("a#private").setAttribute("download", name + "_rsa");
     document.querySelector("a#public").setAttribute("download", name + "_rsa.pub");

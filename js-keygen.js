@@ -1,5 +1,3 @@
-/*jslint browser: true, devel: true, sloppy: true, vars: true*/
-/*globals Uint8Array, Promise */
 var extractable = true;
 var encodePrivateKey, encodePublicKey;
 
@@ -54,3 +52,5 @@ function generateKeyPair(alg, size, name) {
       return Promise.all([privateKey, publicKey]);
     });
 }
+
+module.exportKey = { arrayBufferToBase64, generateKeyPair };
