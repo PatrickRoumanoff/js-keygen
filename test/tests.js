@@ -1,9 +1,11 @@
-var public_ssh = [
+/* global QUnit,arrayToString,pemToArray,arrayToPem,encodePrivateKey,lenToArray,arrayToLen,asnEncodeLen,decodePublicKey,decodePublicKey,encodePublicKey,stringToArray,base64urlDecode,checkHighestBit,integerToOctet */
+
+const publicSsh = [
   "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwi36YMW0eDS3NXSAM/Gcs0txeLOcZE0LQmGPYmHX09Fm1FC9AdzvDWQIfwVylqNy8G6X8+pE0TMuWav4rQjtWRls3j43LdrXkfaTZV2PNJH0ki2zaCND3cz46hBR1bSwi3O4LoN0ZHXoC4ZXoMBXKtYEOg+9jS+pE3vu2QSPruiRROTOYYvrjWx0Bwi8DJc90TmNVeqvPjewPAm4qaTdmh96jIgJQq+vAdhDHu90i31Kl3JUF94x6pzFmg8ZyXOv0Py2GtK9c5To3C33FXI8yTm/sf2Bp7fwd3MEGNcdVNqa7Tt0z2u5Jcmsws93SZuj4iVjbR6xqme9EmIa3BTB7 name",
   "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuew50MaphQgiuM6H7zxMspNojI2Ujf77MuWlAjmw1JxcTkfE7JKzV+9fqmESJNtnZSr3+I2dxQhJ72jttrz+2dFt9ol91muTPWzKrA8XXIBH2o7sEJ+QB8/q7S03d+Zgw6tlo+qdXLOWcKqL5MJhYwzTFEdGTSMF00cBFadcpDq1xFPygGTHRa7m3pK723nGz7TMGWmtBK2bHx+Zlp7geLK/7hl+NRG1lTyIbtdkP2T4Y81Z0bhz9kNHroUei3MFD6HvN93qMJWl3/LZZzTb++1BedNeybGKqbtsB3xp0v3c6bQy49wR3RwrAwL03AKbCwTawAufSeoXyRI+rtgZ/ name",
   "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCpNNtjZeldPuJ5ZgcjO4i6eSJb6kiuf1sULOoWaW9acwSxAfqrmN6Hn7VGg3GK3kSKJUmBKMsF2u+ECajVBec+OTMlbL7oZrYNl2neUYsI7O0G/8lpozZjADYu8CaMqVSAeTa3ORga9Ht/qgCpqXIyEcTsFSbZ45hhaZF0fXQ0GHDCkV/ylBduQHxheCe1SPBSWIO2BwqSlGx/Q76lkL/BnGdcx7xVi3h2yNbEGxqzFuPK75VADZfWria4x09rTqvu41GWIyqzFcbB7BxNImVNh6WVk/qKTcXbfWwH8ck9Cd5bX9g36QaImZ6tW8i/bl3o75bGgP2hSWpsNx8CMVn9 name",
 ];
-var public_ssh_decoded = [
+const publicSshDecoded = [
   {
     type: "ssh-rsa",
     exponent: [1, 0, 1],
@@ -270,7 +272,7 @@ var public_ssh_decoded = [
   },
 ];
 
-var jwk_public = {
+const jwkPublic = {
   alg: "RS1",
   e: "AQAB",
   ext: true,
@@ -280,7 +282,7 @@ var jwk_public = {
     "3PWJ6uDsFPgQo67of3IYw0Svyq95SNh9GS-2gorv68GxWIYYeAShaG_UtTf8mvf6u-VIUr54Re2FoLc78ICR3nRhFH5D1_fNaP9hkMAHBqaJ8ATiq4d7-PfeXTCi0yY0qfWkGjuPtOC3IK7WmnEkiA5qUVpy0oHFPiqoAyNynWJRDFJka00JEpM1QFyF1Tz3PEGp0XlFnClY48iJG9UqXlDgaysnG3ro2sDm8ftva0IjX1Sp7Z9FyWQci-yOYfST00wKHQd7z5-Eo3cTd5M0BhcVXeR0gprdK1TTDLZLznFJQ36HYwrUFEXvTyme6vkZfNPRb0z8KPq5Gs7dujE_cw",
 };
 
-var jwk_private = {
+const jwkPrivate = {
   kty: "RSA",
   kid: "juliet@capulet.lit",
   use: "enc",
@@ -301,76 +303,60 @@ var jwk_private = {
     "lSQi-w9CpyUReMErP1RsBLk7wNtOvs5EQpPqmuMvqW57NBUczScEoPwmUqqabu9V0-Py4dQ57_bapoKRu1R90bvuFnU63SHWEFglZQvJDMeAvmj4sm-Fp0oYu_neotgQ0hzbI5gry7ajdYy9-2lNx_76aBZoOUu9HCJ-UsfSOI8",
 };
 
-var tags = {
-  SEQUENCE: 0x30,
-  INTEGER: 0x02,
-  BIT_STRING: 0x03,
-  OCTET_STRING: 0x04,
-  NULL: 0x05,
-  OBJECT_IDENTIFIER: 0x06,
-  SET: 0x11,
-  PrintableString: 0x13,
-  T61String: 0x14,
-  IA5String: 0x16,
-  UTCTime: 0x17,
-};
-
-QUnit.test("array to PEM", function(assert) {
-  var a = [1, 2, 3];
-  var p = arrayToPem(a);
-  var a2 = pemToArray(p);
+QUnit.test("array to PEM", assert => {
+  const a = [1, 2, 3];
+  const p = arrayToPem(a);
+  const a2 = pemToArray(p);
   assert.deepEqual(a2, a, "can you count?");
 });
 
-QUnit.test("array to String", function(assert) {
-  var a = "ssh-rsa".split("").map(function(c) {
-    return c.charCodeAt();
-  });
+QUnit.test("array to String", assert => {
+  const a = "ssh-rsa".split("").map(c => c.charCodeAt());
   assert.equal(arrayToString(pemToArray(arrayToPem(a))), "ssh-rsa");
 });
 
-QUnit.test("lenToArray", function(assert) {
-  var a = 66051;
+QUnit.test("lenToArray", assert => {
+  const a = 66051;
   assert.deepEqual(lenToArray(a), [0, 1, 2, 3]);
 });
 
-QUnit.test("arrayToLen", function(assert) {
-  var a = [0, 1, 2, 3];
+QUnit.test("arrayToLen", assert => {
+  const a = [0, 1, 2, 3];
   assert.deepEqual(arrayToLen(a), 66051);
 });
 
-public_ssh.forEach(function(public, index) {
-  QUnit.test("decoding ssh public key " + index, function(assert) {
-    var key = decodePublicKey(public);
+publicSsh.forEach((pub, index) => {
+  QUnit.test(`decoding ssh public key ${index}`, assert => {
+    const key = decodePublicKey(pub);
     assert.equal(key.type, "ssh-rsa", "type");
     assert.equal(key.name, "name", "name");
     if (index === 0) {
-      assert.deepEqual(key.key, public_ssh_decoded[0].key, "key");
+      assert.deepEqual(key.key, publicSshDecoded[0].key, "key");
     }
   });
 });
 
-QUnit.test("Encoding ssh public key", function(assert) {
-  var result = encodePublicKey(jwk_public, "name");
+QUnit.test("Encoding ssh public key", assert => {
+  const result = encodePublicKey(jwkPublic, "name");
   assert.equal(
     result,
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDc9Ynq4OwU+BCjruh/chjDRK/Kr3lI2H0ZL7aCiu/rwbFYhhh4BKFob9S1N/ya9/q75UhSvnhF7YWgtzvwgJHedGEUfkPX981o/2GQwAcGponwBOKrh3v4995dMKLTJjSp9aQaO4+04LcgrtaacSSIDmpRWnLSgcU+KqgDI3KdYlEMUmRrTQkSkzVAXIXVPPc8QanReUWcKVjjyIkb1SpeUOBrKycbeujawObx+29rQiNfVKntn0XJZByL7I5h9JPTTAodB3vPn4SjdxN3kzQGFxVd5HSCmt0rVNMMtkvOcUlDfodjCtQURe9PKZ7q+Rl809FvTPwo+rkazt26MT9z name"
   );
 });
 
-QUnit.test("base64url", function(assert) {
-  var result = stringToArray(base64urlDecode(jwk_public.n));
+QUnit.test("base64url", assert => {
+  const result = stringToArray(base64urlDecode(jwkPublic.n));
   assert.equal(result.length, 256);
 });
 
-QUnit.test("high bit", function(assert) {
+QUnit.test("high bit", assert => {
   assert.deepEqual(checkHighestBit([0x80]), [0x00, 0x80]);
   assert.deepEqual(checkHighestBit([0x0f]), [0x0f]);
 });
 
-QUnit.test("jwk", function(assert) {
-  var sshkey = encodePublicKey(jwk_public, "name");
-  assert.deepEqual(stringToArray(base64urlDecode(jwk_public.e)), [1, 0, 1]);
+QUnit.test("jwk", assert => {
+  const sshkey = encodePublicKey(jwkPublic, "name");
+  assert.deepEqual(stringToArray(base64urlDecode(jwkPublic.e)), [1, 0, 1]);
   assert.equal(
     sshkey,
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDc9Ynq4OwU+BCjruh/chjDRK/Kr3lI2H0ZL7aCiu/rwbFYhhh4BKFob9S1N/ya9/q75UhSvnhF7YWgtzvwgJHedGEUfkPX981o/2GQwAcGponwBOKrh3v4995dMKLTJjSp9aQaO4+04LcgrtaacSSIDmpRWnLSgcU+KqgDI3KdYlEMUmRrTQkSkzVAXIXVPPc8QanReUWcKVjjyIkb1SpeUOBrKycbeujawObx+29rQiNfVKntn0XJZByL7I5h9JPTTAodB3vPn4SjdxN3kzQGFxVd5HSCmt0rVNMMtkvOcUlDfodjCtQURe9PKZ7q+Rl809FvTPwo+rkazt26MT9z name"
@@ -382,9 +368,9 @@ QUnit.test("jwk", function(assert) {
   { len: 0x104, octet: [0x01, 0x04] },
   { len: 0xff32, octet: [0xff, 0x32] },
   { len: 0x1000000, octet: [1, 0, 0, 0] },
-  { len: 0x7fffffff, octet: [0x7f, 0xff, 0xff, 0xff] }, //biggest one
-].forEach(function(t) {
-  QUnit.test("Integer to Octet:" + t.len, function(assert) {
+  { len: 0x7fffffff, octet: [0x7f, 0xff, 0xff, 0xff] }, // biggest one
+].forEach(t => {
+  QUnit.test(`Integer to Octet: ${t.len}`, assert => {
     assert.deepEqual(integerToOctet(t.len), t.octet, t.len);
   });
 });
@@ -395,14 +381,14 @@ QUnit.test("jwk", function(assert) {
   { len: 0x134, asn: [0x80 + 2, 0x01, 0x34] },
   { len: 0x12345, asn: [0x80 + 3, 0x01, 0x23, 0x45] },
   { len: 0x123456, asn: [0x80 + 3, 0x12, 0x34, 0x56] },
-].forEach(function(t) {
-  QUnit.test("ASN.1 Len Writing:" + t.len, function(assert) {
+].forEach(t => {
+  QUnit.test(`ASN.1 Len Writing: ${t.len}`, assert => {
     assert.deepEqual(asnEncodeLen(t.len), t.asn, t.len);
   });
 });
 
-QUnit.test("encodePrivateKey", function(assert) {
-  var encoded = encodePrivateKey(jwk_private);
-  console.log(encoded);
+QUnit.test("encodePrivateKey", assert => {
+  encodePrivateKey(jwkPrivate);
+  // console.log(encoded);
   assert.ok(true);
 });

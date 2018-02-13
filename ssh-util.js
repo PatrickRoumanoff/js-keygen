@@ -1,4 +1,5 @@
-var base64urlDecode;
+/* eslint no-bitwise: 0 */
+/* global base64urlDecode */
 
 function arrayToString(a) {
   return String.fromCharCode.apply(null, a);
@@ -21,25 +22,24 @@ function arrayToPem(a) {
 }
 
 function arrayToLen(a) {
-  var result = 0,
-    i;
-  for (i = 0; i < a.length; i += 1) {
+  let result = 0;
+  for (let i = 0; i < a.length; i += 1) {
     result = result * 256 + a[i];
   }
   return result;
 }
 
 function integerToOctet(n) {
-  var result = [];
-  for (true; n > 0; n = n >> 8) {
-    result.push(n & 0xff);
+  const result = [];
+  for (let i = n; i > 0; i >>= 8) {
+    result.push(i & 0xff);
   }
   return result.reverse();
 }
 
 function lenToArray(n) {
-  var oct = integerToOctet(n),
-    i;
+  const oct = integerToOctet(n);
+  let i;
   for (i = oct.length; i < 4; i += 1) {
     oct.unshift(0);
   }
@@ -47,22 +47,22 @@ function lenToArray(n) {
 }
 
 function decodePublicKey(s) {
-  var split = s.split(" ");
-  var prefix = split[0];
+  const split = s.split(" ");
+  const prefix = split[0];
   if (prefix !== "ssh-rsa") {
-    throw "Unknown prefix:" + prefix;
+    throw new Error(`Unknown prefix: ${prefix}`);
   }
-  var buffer = pemToArray(split[1]);
-  var nameLen = arrayToLen(buffer.splice(0, 4));
-  var type = arrayToString(buffer.splice(0, nameLen));
+  const buffer = pemToArray(split[1]);
+  const nameLen = arrayToLen(buffer.splice(0, 4));
+  const type = arrayToString(buffer.splice(0, nameLen));
   if (type !== "ssh-rsa") {
-    throw "Unknown key type:" + type;
+    throw new Error(`Unknown key type: ${type}`);
   }
-  var exponentLen = arrayToLen(buffer.splice(0, 4));
-  var exponent = buffer.splice(0, exponentLen);
-  var keyLen = arrayToLen(buffer.splice(0, 4));
-  var key = buffer.splice(0, keyLen);
-  return { type: type, exponent: exponent, key: key, name: split[2] };
+  const exponentLen = arrayToLen(buffer.splice(0, 4));
+  const exponent = buffer.splice(0, exponentLen);
+  const keyLen = arrayToLen(buffer.splice(0, 4));
+  const key = buffer.splice(0, keyLen);
+  return { type, exponent, key, name: split[2] };
 }
 
 function checkHighestBit(v) {
@@ -83,18 +83,18 @@ function jwkToInternal(jwk) {
 }
 
 function encodePublicKey(jwk, name) {
-  var k = jwkToInternal(jwk);
+  const k = jwkToInternal(jwk);
   k.name = name;
-  var keyLenA = lenToArray(k.key.length);
-  var exponentLenA = lenToArray(k.exponent.length);
-  var typeLenA = lenToArray(k.type.length);
-  var array = [].concat(typeLenA, stringToArray(k.type), exponentLenA, k.exponent, keyLenA, k.key);
-  var encoding = arrayToPem(array);
-  return k.type + " " + encoding + " " + k.name;
+  const keyLenA = lenToArray(k.key.length);
+  const exponentLenA = lenToArray(k.exponent.length);
+  const typeLenA = lenToArray(k.type.length);
+  const array = [].concat(typeLenA, stringToArray(k.type), exponentLenA, k.exponent, keyLenA, k.key);
+  const encoding = arrayToPem(array);
+  return `${k.type} ${encoding} ${k.name}`;
 }
 
 function asnEncodeLen(n) {
-  var result = [];
+  let result = [];
   if (n >> 7) {
     result = integerToOctet(n);
     result.unshift(0x80 + result.length);
@@ -105,18 +105,17 @@ function asnEncodeLen(n) {
 }
 
 function encodePrivateKey(jwk) {
-  var order = ["n", "e", "d", "p", "q", "dp", "dq", "qi"];
-  var list = order.map(prop => {
-    var v = checkHighestBit(stringToArray(base64urlDecode(jwk[prop])));
-    var len = asnEncodeLen(v.length);
+  const order = ["n", "e", "d", "p", "q", "dp", "dq", "qi"];
+  const list = order.map(prop => {
+    const v = checkHighestBit(stringToArray(base64urlDecode(jwk[prop])));
+    const len = asnEncodeLen(v.length);
     return [0x02].concat(len, v); // int tag is 0x02
   });
-  var seq = [0x02, 0x01, 0x00]; // extra seq for SSH
-  seq = seq.concat.apply(seq, list);
-  var len = asnEncodeLen(seq.length);
-  var a = [0x30].concat(len, seq); // seq is 0x30
+  let seq = [0x02, 0x01, 0x00]; // extra seq for SSH
+  seq = seq.concat(...list);
+  const len = asnEncodeLen(seq.length);
+  const a = [0x30].concat(len, seq); // seq is 0x30
   return arrayToPem(a);
 }
 
-module = window.module || {};
 module.exports = { base64urlToArray, decodePublicKey, encodePublicKey, encodePrivateKey };
