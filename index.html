@@ -1,59 +1,86 @@
 <!doctype html>
 <html>
+
 <head>
   <title>js-keygen</title>
-  <script src="base64url.js"></script>  
-  <script src="ssh-util.js"></script>  
+  <script src="base64url.js"></script>
+  <script src="ssh-util.js"></script>
   <script src="js-keygen-ui.js"></script>
   <script src="js-keygen.js"></script>
   <link rel="stylesheet" href="js-keygen.css">
   <link rel="icon" type="image/png" href="key.png">
 </head>
+
 <body>
   <div id="content">
-  <h1>js-keygen</h1>
-  
-  Generate a keypair to be used with openSSH, this replicate ssh-keygen function in javascript in the browser, using the webcrypto api and a bit of glue.<br>
-  For an in-depth explanation on how this work, see the <a href="http://blog.roumanoff.com/2015/09/using-webcrypto-api-to-generate-keypair.html">blog post</a>.<br>
-  Usually you would want to save the private key to the machine initiating the ssh connection, and you want to copy the public key to the system receiving the connection.<br>
-  No data is being sent to the server, everything happens within the context of this web page.<br>
-  <a href="https://twitter.com/share" class="twitter-share-button" data-via="pkr2">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script><hr>
-  <div><label for="name">Name:</label><input id="name" type="text" value="webcrypto"></div>
-  <div><label for="alg">Algorithm:</label><select id="alg" disabled>
-    <option value="RSASSA-PKCS1-v1_5" selected>RSASSA-PKCS1-v1_5</option>
-    <option value="RSA-PSS">RSA-PSS</option>
-    <option value="ECDSA">ECDSA</option>
-    </select>
-    <label for="size">Size:</label><select id="size" disabled>
-    <option value="1024" selected>1024</option>
-    <option value="2048">2048</option>
-    <option value="4096">4096</option>
-    </select>
-  </div>
-  <div><label for="hash">Hash:</label><select id="hash" disabled>
-      <option value="SHA-1" selected>SHA-1</option>
-      <option value="SHA-256">SHA-256</option>
-      <option value="SHA-384">SHA-384</option>
-      <option value="SHA-512">SHA-512</option>
-    </select></div>
-  <label for="generate"></label><button id="generate">Generate</button>
-  <br>
+    <h1>js-keygen</h1>
 
-  <div id="result" style="display:none;">
-    <hr>  
-    <a id="private" style="display: none;" href="" download="id_rsa">id_rsa</a>
-    <a id="public" style="display: none;" href="" download="id_rsa.pub">id_rsa.pub</a>  
-    Private Key <button id="copyPrivate">Copy</button> or <button id="savePrivate">Save</button><br>
-    <textarea id="privateKey" style="height: 150px;" spellcheck="false"></textarea>
-
+    Generate a keypair to be used with openSSH, this replicate ssh-keygen function in javascript in the browser, using the webcrypto
+    api and a bit of glue.
+    <br> For an in-depth explanation on how this work, see the
+    <a href="http://blog.roumanoff.com/2015/09/using-webcrypto-api-to-generate-keypair.html">blog post</a>.
+    <br> Usually you would want to save the private key to the machine initiating the ssh connection, and you want to copy the
+    public key to the system receiving the connection.
+    <br> No data is being sent to the server, everything happens within the context of this web page.
+    <br>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-via="pkr2">Tweet</a>
+    <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + '://platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'twitter-wjs');</script>
     <hr>
-    Public Key <button id="copyPublic">Copy</button> or <button id="savePublic">Save</button><br>
-    <textarea id="publicKey" spellcheck="false"></textarea>
-  </div>  
-  <hr>
-  Made with <span style="color:magenta;">&hearts;</span> by <a href="http://blog.roumanoff.com">Patrick Roumanoff</a>
-  <a href="https://github.com/PatrickRoumanoff/js-keygen"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
-</div>
+    <div>
+      <label for="name">Name:</label>
+      <input id="name" type="text" value="webcrypto">
+    </div>
+    <div>
+      <label for="alg">Algorithm:</label>
+      <select id="alg" disabled>
+        <option value="RSASSA-PKCS1-v1_5" selected>RSASSA-PKCS1-v1_5</option>
+        <option value="RSA-PSS">RSA-PSS</option>
+        <option value="ECDSA">ECDSA</option>
+      </select>
+      <label for="size">Size:</label>
+      <select id="size" disabled>
+        <option value="1024" selected>1024</option>
+        <option value="2048">2048</option>
+        <option value="4096">4096</option>
+      </select>
+    </div>
+    <div>
+      <label for="hash">Hash:</label>
+      <select id="hash" disabled>
+        <option value="SHA-1" selected>SHA-1</option>
+        <option value="SHA-256">SHA-256</option>
+        <option value="SHA-384">SHA-384</option>
+        <option value="SHA-512">SHA-512</option>
+      </select>
+    </div>
+    <label for="generate"></label>
+    <button id="generate">Generate</button>
+    <br>
+
+    <div id="result" style="display:none;">
+      <hr>
+      <a id="private" style="display: none;" href="" download="id_rsa">id_rsa</a>
+      <a id="public" style="display: none;" href="" download="id_rsa.pub">id_rsa.pub</a>
+      Private Key
+      <button id="copyPrivate">Copy</button> or
+      <button id="savePrivate">Save</button>
+      <br>
+      <textarea id="privateKey" style="height: 150px;" spellcheck="false"></textarea>
+
+      <hr> Public Key
+      <button id="copyPublic">Copy</button> or
+      <button id="savePublic">Save</button>
+      <br>
+      <textarea id="publicKey" spellcheck="false"></textarea>
+    </div>
+    <hr> Made with
+    <span style="color:magenta;">&hearts;</span> by
+    <a href="http://blog.roumanoff.com">Patrick Roumanoff</a>
+    <a href="https://github.com/PatrickRoumanoff/js-keygen">
+      <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67"
+        alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png">
+    </a>
+  </div>
 </body>
+
 </html>

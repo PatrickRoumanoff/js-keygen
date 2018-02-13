@@ -2,12 +2,11 @@
   "name": "js-keypair",
   "version": "1.0.0",
   "description": "Generate a key pair using the webcrypto API",
-  "main": "keypair.js",
-  "dependencies": {
-  },
+  "main": "js-keygen.js",
+  "dependencies": {},
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"To run test open test/index.html in your browser\""
   },
   "author": "patrick@roumanoff.com",
   "license": "Apache 2.0"

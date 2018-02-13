@@ -1,10 +1,10 @@
 body {
- background-color: #cccccc;
+  background-color: #cccccc;
   font: 16px Arial, Tahoma, Helvetica, FreeSans, sans-serif;
 }
 
 button#generate {
-  background-color: rgb(60,200,30);
+  background-color: rgb(60, 200, 30);
   padding: 10px;
   margin-top: 5px;
   color: white;
@@ -29,7 +29,7 @@ label {
   display: inline-block;
   width: 80px;
 }
-select{
+select {
   width: 200px;
 }
 input {
