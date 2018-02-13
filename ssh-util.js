@@ -5,9 +5,7 @@ function arrayToString(a) {
 }
 
 function stringToArray(s) {
-  return s.split("").map(function(c) {
-    return c.charCodeAt();
-  });
+  return s.split("").map(c => c.charCodeAt());
 }
 
 function base64urlToArray(s) {
@@ -19,13 +17,7 @@ function pemToArray(pem) {
 }
 
 function arrayToPem(a) {
-  return window.btoa(
-    a
-      .map(function(c) {
-        return String.fromCharCode(c);
-      })
-      .join("")
-  );
+  return window.btoa(a.map(c => String.fromCharCode(c)).join(""));
 }
 
 function arrayToLen(a) {
@@ -114,7 +106,7 @@ function asnEncodeLen(n) {
 
 function encodePrivateKey(jwk) {
   var order = ["n", "e", "d", "p", "q", "dp", "dq", "qi"];
-  var list = order.map(function(prop) {
+  var list = order.map(prop => {
     var v = checkHighestBit(stringToArray(base64urlDecode(jwk[prop])));
     var len = asnEncodeLen(v.length);
     return [0x02].concat(len, v); // int tag is 0x02
@@ -126,4 +118,5 @@ function encodePrivateKey(jwk) {
   return arrayToPem(a);
 }
 
+module = module || {};
 module.exports = { base64urlToArray, decodePublicKey, encodePublicKey, encodePrivateKey };

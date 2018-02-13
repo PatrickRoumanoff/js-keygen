@@ -38,19 +38,17 @@ function generateKeyPair(alg, size, name) {
       extractable,
       ["sign", "verify"]
     )
-    .then(function(key) {
+    .then(key => {
       var privateKey = window.crypto.subtle
         .exportKey("jwk", key.privateKey)
         .then(encodePrivateKey)
         .then(wrap)
         .then(rsaPrivateKey);
 
-      var publicKey = window.crypto.subtle.exportKey("jwk", key.publicKey).then(function(jwk) {
-        return encodePublicKey(jwk, name);
-      });
-
+      var publicKey = window.crypto.subtle.exportKey("jwk", key.publicKey).then(jwk => encodePublicKey(jwk, name));
       return Promise.all([privateKey, publicKey]);
     });
 }
 
+module = module || {};
 module.exportKey = { arrayBufferToBase64, generateKeyPair };

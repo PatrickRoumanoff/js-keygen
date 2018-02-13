@@ -26,4 +26,5 @@ function base64urlDecode(s) {
   return window.atob(s); // Regular base64 decoder
 }
 
+module = module || {};
 module.exports = { base64urlDecode, base64urlEncode };
