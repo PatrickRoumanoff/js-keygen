@@ -49,4 +49,4 @@ function generateKeyPair(alg, size, name) {
     });
 }
 
-module.exportKey = { arrayBufferToBase64, generateKeyPair };
+module.exports = { arrayBufferToBase64, generateKeyPair };
