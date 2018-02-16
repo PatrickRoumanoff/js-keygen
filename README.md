@@ -15,3 +15,7 @@ There is no way to generate a ssh keypair on a chromebook, but we have access to
 The end result is a usable single page app that will locally generate a keypair you can save to local drive. Allowing you to do that straight from chrome on a chrome book.
 
 Everywhere else, you should have access to ssh-keygen which is the recommended way to generate keypair for SSH.
+
+## How to convert from OpenSSH public key format to PEM
+
+see https://js-keygen.surge.sh/convert.html for how to convert.
